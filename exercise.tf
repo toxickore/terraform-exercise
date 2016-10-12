@@ -86,6 +86,7 @@ resource "aws_route" "example_pub_route" {
 	gateway_id = "${aws_internet_gateway.example_igw.id}"
 }
 
+/*
 resource "aws_instance" "example_nat_instance" {
 	ami = "ami-c481fad3"
 	instance_type = "t2.micro"
@@ -93,9 +94,24 @@ resource "aws_instance" "example_nat_instance" {
 		Name = "example_nat_instance"
 	}
 }
+*/
 
 /*
 resource "aws_nat_gateway" "example_nat_gw" {
 	allocation_id = "${aws_eip.nat.id}"
 	
 }*/
+
+resource "aws_launch_configuration" "example_lc" {
+	name = "example_lc"
+	image_id = "ami-c481fad3"
+	instance_type = "t2.micro"
+}
+
+resource "aws_autoscaling_group" "example_autoscale01" {
+	availability_zones = ["us-east-1a","us-east-1b"]
+	name = "example_autoscale01"
+	max_size = 1
+	min_size = 1
+	launch_configuration = "${aws_launch_configuration.example_lc.name}"
+}
