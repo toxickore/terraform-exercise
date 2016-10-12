@@ -102,10 +102,12 @@ resource "aws_nat_gateway" "example_nat_gw" {
 	
 }*/
 
+
 resource "aws_launch_configuration" "example_lc" {
 	name = "example_lc"
 	image_id = "ami-c481fad3"
 	instance_type = "t2.micro"
+	security_groups = ["example_secgroup01"]
 }
 
 resource "aws_autoscaling_group" "example_asg01" {
@@ -130,5 +132,43 @@ resource "aws_s3_bucket" "example_bucket" {
 
 	tags {
 		Name = "example_bucket"
+	}
+}
+
+/*
+resource "aws_eip" "example_eip01" {
+	instance = "${aws_instance.example_nat_instance.id}"
+	vpc = true
+}
+
+resource "aws_eip" "example_eip01" {
+	instance = "${aws_instance.example_nat_instance.id}"
+	vpc = true
+}
+*/
+
+resource "aws_security_group" "example_secgroup01" {
+	name = "example_secgroup01"
+	description = "Very basic security group to allow ssh connections and web traffic on http/https"
+
+	ingress {
+		from_port = 22
+		to_port = 22
+		protocol = "tcp"	
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+
+	ingress {
+		from_port = 80
+		to_port = 80
+		protocol = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+
+	ingress {
+		from_port = 443
+		to_port = 443
+		protocol = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
 	}
 }
