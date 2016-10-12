@@ -72,7 +72,6 @@ resource "aws_route_table" "example_pub_route_table" {
 	tags {
 		Name = "example_pub_route_table"
 	}
-
 }
 
 resource "aws_route" "example_priv_route" {
@@ -86,3 +85,17 @@ resource "aws_route" "example_pub_route" {
 	destination_cidr_block = "0.0.0.0/16"
 	gateway_id = "${aws_internet_gateway.example_igw.id}"
 }
+
+resource "aws_instance" "example_nat_instance" {
+	ami = "ami-c481fad3"
+	instance_type = "t2.micro"
+	tags {
+		Name = "example_nat_instance"
+	}
+}
+
+/*
+resource "aws_nat_gateway" "example_nat_gw" {
+	allocation_id = "${aws_eip.nat.id}"
+	
+}*/
