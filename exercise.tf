@@ -123,3 +123,12 @@ resource "aws_autoscaling_group" "example_asg02" {
 	min_size = 1
 	launch_configuration = "${aws_launch_configuration.example_lc.name}"
 }
+
+resource "aws_s3_bucket" "example_bucket" {
+	bucket = "example_terraform_s3_bucket"
+	acl = "private"
+
+	tags {
+		Name = "example_bucket"
+	}
+}
