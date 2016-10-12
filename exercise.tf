@@ -108,6 +108,12 @@ resource "aws_launch_configuration" "example_lc" {
 	image_id = "ami-c481fad3"
 	instance_type = "t2.micro"
 	security_groups = ["example_secgroup01"]
+	ebs_block_device = {
+		device_name = "/dev/sdk"
+		volume_size = 1
+		volume_type = "standard"
+		delete_on_termination = true
+	}
 }
 
 resource "aws_autoscaling_group" "example_asg01" {
