@@ -46,14 +46,32 @@ resource "aws_subnet" "example_pub02_subnet" {
 	}
 }
 
+resource "aws_route_table" "example_priv_rt" {
+	vpc_id = "${aws_vpc.example_vpc.id}"
+	route {
+		cidr_block = "10.0.1.0/24"
+		gateway_id = "${aws_internet_gateway.example_igw.id}"
+	}
+	
+	tags {
+		Name = "example_priv_rt"
+	}
+}
+
 resource "aws_route_table" "example_pub_rt" {
 	vpc_id = "${aws_vpc.example_vpc.id}"
 	route {
-		cidr_block = "10.0.1.0//24"
+		cidr_block = "10.0.3.0/24"
 		gateway_id = "${aws_internet_gateway.example_igw.id}"
 	}
 	
 	tags {
 		Name = "example_pub_rt"
 	}
+
+}
+
+resource "aws_route" "example_priv_r" {
+	route_table_id = "${aws_route_table.example_priv_rt.id}"
+	destination_cidr_block = "10.0.1.0/22"
 }
