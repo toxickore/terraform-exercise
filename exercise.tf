@@ -108,9 +108,17 @@ resource "aws_launch_configuration" "example_lc" {
 	instance_type = "t2.micro"
 }
 
-resource "aws_autoscaling_group" "example_autoscale01" {
+resource "aws_autoscaling_group" "example_asg01" {
 	availability_zones = ["us-east-1a","us-east-1b"]
-	name = "example_autoscale01"
+	name = "example_asg01"
+	max_size = 1
+	min_size = 1
+	launch_configuration = "${aws_launch_configuration.example_lc.name}"
+}
+
+resource "aws_autoscaling_group" "example_asg02" {
+	availability_zones = ["us-east-1c","us-east-1e"]
+	name = "example_asg02"
 	max_size = 1
 	min_size = 1
 	launch_configuration = "${aws_launch_configuration.example_lc.name}"
