@@ -54,7 +54,7 @@ resource "aws_route_table" "example_priv_route_table" {
 	vpc_id = "${aws_vpc.example_vpc.id}"
 	route {
 		cidr_block = "0.0.0.0/16"
-		gateway_id = "${aws_internet_gateway.example_igw.id}"
+		gateway_id = "${aws_nat_gateway.example_nat_gw.id}"
 }
 	
 	tags {
@@ -86,22 +86,10 @@ resource "aws_route" "example_pub_route" {
 	gateway_id = "${aws_internet_gateway.example_igw.id}"
 }
 
-/*
-resource "aws_instance" "example_nat_instance" {
-	ami = "ami-c481fad3"
-	instance_type = "t2.micro"
-	tags {
-		Name = "example_nat_instance"
-	}
-}
-*/
-
-/*
 resource "aws_nat_gateway" "example_nat_gw" {
-	allocation_id = "${aws_eip.nat.id}"
-	
-}*/
-
+	allocation_id = "eipalloc-207c2e1f"
+	subnet_id = "${aws_subnet.example_pub01_subnet.id}"
+}
 
 resource "aws_launch_configuration" "example_lc" {
 	name = "example_lc"
@@ -114,6 +102,8 @@ resource "aws_launch_configuration" "example_lc" {
 		volume_type = "standard"
 		delete_on_termination = true
 	}
+	user_data = "yum -y install httpd && service httpd start"
+	key_name = "emerson"
 }
 
 resource "aws_autoscaling_group" "example_asg01" {
