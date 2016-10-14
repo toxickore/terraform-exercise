@@ -10,7 +10,7 @@ This terraform template will create the following
 - NAT gateway;
 - Two autoscaled EC2 instances distributed across Availability Zones;
 - S3 bucket;
-- Two Elastic IP (attached to each instance);
+- Two public IP (attached to each instance);
 - Custom security group attached to every instance (any which you think may be needed);
 - EBS volumes of any size attached as root device (of type magnetic);
 - Elastic Load Balancer for instances created (ELB port 80 to instance port 80);
