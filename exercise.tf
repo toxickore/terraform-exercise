@@ -137,7 +137,7 @@ resource "aws_eip" "example_eip01" {
 	vpc = true
 }
 
-resource "aws_eip" "example_eip01" {
+resource "aws_eip" "example_eip02" {
 	instance = "${aws_instance.example_nat_instance.id}"
 	vpc = true
 }
@@ -167,4 +167,7 @@ resource "aws_security_group" "example_secgroup01" {
 		protocol = "tcp"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
+
+	vpc_id = "${aws_vpc.example_vpc.id}"
+
 }
