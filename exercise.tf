@@ -112,6 +112,7 @@ resource "aws_autoscaling_group" "example_asg01" {
 	max_size = 1
 	min_size = 1
 	launch_configuration = "${aws_launch_configuration.example_lc.name}"
+	load_balancers = ["${aws_elb.example_elb.id}"]
 }
 
 resource "aws_autoscaling_group" "example_asg02" {
@@ -120,6 +121,7 @@ resource "aws_autoscaling_group" "example_asg02" {
 	max_size = 1
 	min_size = 1
 	launch_configuration = "${aws_launch_configuration.example_lc.name}"
+	load_balancers = ["${aws_elb.example_elb.id}"]
 }
 
 resource "aws_s3_bucket" "example_bucket" {
@@ -131,7 +133,7 @@ resource "aws_s3_bucket" "example_bucket" {
 	}
 }
 
-/*
+/* EIP commented, no nat Instance on this terraform script
 resource "aws_eip" "example_eip01" {
 	instance = "${aws_instance.example_nat_instance.id}"
 	vpc = true
@@ -170,4 +172,28 @@ resource "aws_security_group" "example_secgroup01" {
 
 	vpc_id = "${aws_vpc.example_vpc.id}"
 
+}
+
+resource "aws_elb" "example_elb" {
+	name = "example-elb"
+	availability_zones = ["us-east-1a","us-east-1b","us-east-1c","us-east-1e"]
+
+	listener {
+		instance_port = 80
+		instance_protocol = "http"
+		lb_port = 80
+		lb_protocol = "http"
+	}
+
+	health_check {
+		healthy_threshold = 2
+		unhealthy_threshold = 2
+		timeout = 3
+		target = "HTTP:80/"
+		interval = 30
+	}
+
+	tags {
+		Name = "example-elb"
+	}
 }
